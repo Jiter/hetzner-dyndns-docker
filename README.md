@@ -10,6 +10,13 @@ Build
 
 `docker build . -t hetzner-dyndns`
 
+Prepare
+-------
+
+1. Login to Fritzbox
+2. Go to **Heimnetz** | **Netzwerk** | **Netzwerkeinstellungen**
+3. Enable **Statusinformationen über UPnP übertragen** (if not already enabled)
+
 Run
 ---
 
