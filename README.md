@@ -25,4 +25,7 @@ Run
 Credits
 -------
 
-Playbooks based on previous work from P. Haberkern (thedatabaseme) but adjusted because the Fritzbox UPNP interface does not need username/password and it does not update the record if the IP has not changed.
+Playbooks based on previous work from P. Haberkern (thedatabaseme) with the following adjustments:
+* Fritzbox UPNP interface does not need username/password
+* Don't update the record if the IP has not changed
+* Set TTL for DNS entry to 60 seconds instead of 24 hours
