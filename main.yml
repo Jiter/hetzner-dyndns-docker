@@ -1,0 +1,3 @@
+---
+- import_playbook: get_connection_info.yml
+- import_playbook: dyndns.yml

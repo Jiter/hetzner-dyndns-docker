@@ -1,0 +1,49 @@
+---
+
+# Version 1.0.0
+
+- hosts: "localhost"
+  gather_facts: true
+
+  vars:
+    dns_zone: "mydomain.com"
+    dyndns_names:
+      - "dyndns"
+    api_key: ""
+    external_ip_address: ""
+
+    # DO NOT SET!
+    dns_record_id: "" # Do not set!
+    dns_record_type: "" # Do not set!
+
+  tasks:
+    - name: Assert that external IP Address is set
+      ansible.builtin.assert:
+        that: "{{ external_ip_address | length > 0 }}"
+        fail_msg: "It seems that you haven't provided an external IP Address."
+        success_msg: "IP Address provided. Proceeding."
+
+    - name: Get Zone ID for {{ dns_zone }}
+      ansible.builtin.uri:
+        url: "https://dns.hetzner.com/api/v1/zones?name={{ dns_zone }}"
+        method: GET
+        headers:
+          Auth-API-Token: "{{ api_key }}"
+      register: zone_id
+
+    - name: Get all DNS Records for Zone {{ dns_zone }}
+      ansible.builtin.uri:
+        url: "https://dns.hetzner.com/api/v1/records?zone_id={{ zone_id.json.zones[0].id }}"
+        method: GET
+        headers:
+          Auth-API-Token: "{{ api_key }}"
+      register: dns_records
+
+#    - debug:
+#        var: dns_records
+
+    - name: Manage Record
+      include_tasks: manage_record.yml
+      loop: "{{ dyndns_names }}"
+      loop_control:
+        loop_var: dyndns_name
